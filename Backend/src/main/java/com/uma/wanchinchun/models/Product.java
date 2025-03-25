@@ -3,8 +3,10 @@ package com.uma.wanchinchun.models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "productos")
@@ -21,50 +23,55 @@ public class Product {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modificado;
     private String miniatura;
-    @OneToMany(mappedBy = "producto")
-    private List<Category> categorias;
+    // Se ha cambiado de List a Set, para evitar duplicados y optimizar
+    @ManyToMany
+    @JoinTable(name = "producto_categoria", // Nombre de la tabla intermedia
+            joinColumns = @JoinColumn(name = "producto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    private Set<Category> categorias = new HashSet<>();
+
     // private List<> relaciones;
 
-    public Product() {}
-
-    public Long getId() {
-        return id;
+    // Añadido por Pablo
+    // ---
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", nombre='" + nombre + "'}";
+    }
+    // ---
+    
+    // Métodos para que se actualize automaticamente ambas tablas
+    public void addCategoria(Category categoria) {
+        this.categorias.add(categoria);
+        categoria.getProductos().add(this);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void removeCategoria(Category categoria) {
+        this.categorias.remove(categoria);
+        categoria.getProductos().remove(this);
+    }
+
+    public Product() {
+    }
+
+    // Getters
+    public Long getId() {
+        return id;
     }
 
     public String getGtin() {
         return gtin;
     }
 
-    public void setGtin(String gtin) {
-        this.gtin = gtin;
-    }
-
     public String getSku() {
         return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getTextoCorto() {
         return textoCorto;
-    }
-
-    public void setTextoCorto(String textoCorto) {
-        this.textoCorto = textoCorto;
     }
 
     public Date getCreado() {
@@ -75,30 +82,57 @@ public class Product {
         return modificado;
     }
 
-    public void setModificado(Date modificado) {
-        this.modificado = modificado;
-    }
-
     public String getMiniatura() {
         return miniatura;
+    }
+
+    public Set<Category> getCategorias() {
+        return categorias;
+    }
+
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setGtin(String gtin) {
+        this.gtin = gtin;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setTextoCorto(String textoCorto) {
+        this.textoCorto = textoCorto;
+    }
+
+    public void setCreado(Date creado) {
+        this.creado = creado;
+    }
+
+    public void setModificado(Date modificado) {
+        this.modificado = modificado;
     }
 
     public void setMiniatura(String miniatura) {
         this.miniatura = miniatura;
     }
 
-    public List<Category> getCategorias() {
-        return categorias;
-    }
-
-    public void setCategorias(List<Category> categorias) {
+    public void setCategorias(Set<Category> categorias) {
         this.categorias = categorias;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Product product = (Product) o;
         return Objects.equals(id, product.id) &&
                 Objects.equals(gtin, product.gtin) &&
