@@ -20,7 +20,10 @@ public class Product {
     private Date creado;
     @Temporal(TemporalType.TIMESTAMP)
     private Date modificado;
-    private String miniatura;
+    private byte[] miniatura;
+    @ElementCollection
+    @CollectionTable(name = "atributos_producto", joinColumns = @JoinColumn(name = "id_producto"))
+    private List<Atributo> atributos;
     @OneToMany(mappedBy = "producto")
     private List<Category> categorias;
     // private List<> relaciones;
