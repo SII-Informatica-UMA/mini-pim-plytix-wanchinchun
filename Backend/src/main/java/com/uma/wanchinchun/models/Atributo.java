@@ -1,6 +1,7 @@
 package com.uma.wanchinchun.models;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Id;
 
 import java.util.Objects;
 

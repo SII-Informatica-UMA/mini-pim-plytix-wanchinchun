@@ -50,9 +50,9 @@ public class WanchinchunApplication {
             mouse.setCreado(new Date());
 
             // 3. Establecer relaciones ManyToMany
-            laptop.getCategorias().add(electronica);
-            laptop.getCategorias().add(computacion);
-            mouse.getCategorias().add(electronica);
+            //laptop.getCategorias().add(electronica);
+            //laptop.getCategorias().add(computacion);
+            //mouse.getCategorias().add(electronica);
 
             // 4. Guardar productos (las categorías se actualizan por cascade)
             productRepository.save(laptop);
