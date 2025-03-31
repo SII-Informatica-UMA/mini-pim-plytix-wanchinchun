@@ -22,17 +22,17 @@ public class Product {
     private Date creado;
     @Temporal(TemporalType.TIMESTAMP)
     private Date modificado;
-    private String miniatura;
-    // Se ha cambiado de List a Set, para evitar duplicados y optimizar
+    private byte[] miniatura;
+    @ElementCollection
+    @CollectionTable(name = "atributos_producto", joinColumns = @JoinColumn(name = "id_producto"))
+    private List<Atributo> atributos;
     @ManyToMany
-    @JoinTable(name = "producto_categoria", // Nombre de la tabla intermedia
+    @JoinTable(name = "producto_categoria",
             joinColumns = @JoinColumn(name = "producto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    private Set<Category> categorias = new HashSet<>();
+    private List<Category> categorias;
 
     // private List<> relaciones;
 
-    // Añadido por Pablo
-    // ---
     @Override
     public String toString() {
         return "Product{" + "id=" + id + ", nombre='" + nombre + "'}";
