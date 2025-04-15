@@ -5,7 +5,7 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Atributo {
+public class Attribute {
     private String nombre;
     private String valor;
 
@@ -29,8 +29,8 @@ public class Atributo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Atributo atributo = (Atributo) o;
-        return nombre.equals(atributo.nombre) && valor.equals(atributo.valor);
+        Attribute attribute = (Attribute) o;
+        return nombre.equals(attribute.nombre) && valor.equals(attribute.valor);
     }
 
     @Override

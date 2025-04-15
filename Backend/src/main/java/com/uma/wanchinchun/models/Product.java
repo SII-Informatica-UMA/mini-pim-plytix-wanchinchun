@@ -10,7 +10,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(unique = true)
     private String gtin;
+    @Column(unique = true)
     private String sku;
     private String nombre;
     private String textoCorto;
@@ -22,7 +24,7 @@ public class Product {
     private byte[] miniatura;
     @ElementCollection
     @CollectionTable(name = "atributos_producto", joinColumns = @JoinColumn(name = "id_producto"))
-    private List<Atributo> atributos;
+    private List<Attribute> attributes;
     @ManyToMany
     @JoinTable(name = "producto_categoria",
             joinColumns = @JoinColumn(name = "producto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
@@ -34,7 +36,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(Long id, String gtin, String sku, String nombre, String textoCorto, Date creado, Date modificado, byte[] miniatura, List<Atributo> atributos, Set<Category> categorias, List<ProductRelationship> relacionesOrigen, List<ProductRelationship> relacionesDestino) {
+    public Product(Long id, String gtin, String sku, String nombre, String textoCorto, Date creado, Date modificado, byte[] miniatura, List<Attribute> attributes, Set<Category> categorias, List<ProductRelationship> relacionesOrigen, List<ProductRelationship> relacionesDestino) {
         this.id = id;
         this.gtin = gtin;
         this.sku = sku;
@@ -43,7 +45,7 @@ public class Product {
         this.creado = creado;
         this.modificado = modificado;
         this.miniatura = miniatura;
-        this.atributos = atributos;
+        this.attributes = attributes;
         this.categorias = categorias;
         this.relacionesOrigen = relacionesOrigen;
         this.relacionesDestino = relacionesDestino;
@@ -113,12 +115,12 @@ public class Product {
         this.miniatura = miniatura;
     }
 
-    public List<Atributo> getAtributos() {
-        return atributos;
+    public List<Attribute> getAtributos() {
+        return attributes;
     }
 
-    public void setAtributos(List<Atributo> atributos) {
-        this.atributos = atributos;
+    public void setAtributos(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     public Set<Category> getCategorias() {
@@ -150,12 +152,12 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id.equals(product.id) && gtin.equals(product.gtin) && sku.equals(product.sku) && nombre.equals(product.nombre) && textoCorto.equals(product.textoCorto) && creado.equals(product.creado) && modificado.equals(product.modificado) && Arrays.equals(miniatura, product.miniatura) && atributos.equals(product.atributos) && categorias.equals(product.categorias) && relacionesOrigen.equals(product.relacionesOrigen) && relacionesDestino.equals(product.relacionesDestino);
+        return id.equals(product.id) && gtin.equals(product.gtin) && sku.equals(product.sku) && nombre.equals(product.nombre) && textoCorto.equals(product.textoCorto) && creado.equals(product.creado) && modificado.equals(product.modificado) && Arrays.equals(miniatura, product.miniatura) && attributes.equals(product.attributes) && categorias.equals(product.categorias) && relacionesOrigen.equals(product.relacionesOrigen) && relacionesDestino.equals(product.relacionesDestino);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, gtin, sku, nombre, textoCorto, creado, modificado, atributos, categorias, relacionesOrigen, relacionesDestino);
+        int result = Objects.hash(id, gtin, sku, nombre, textoCorto, creado, modificado, attributes, categorias, relacionesOrigen, relacionesDestino);
         result = 31 * result + Arrays.hashCode(miniatura);
         return result;
     }
