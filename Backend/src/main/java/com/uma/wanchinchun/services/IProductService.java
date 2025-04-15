@@ -1,10 +1,14 @@
 package com.uma.wanchinchun.services;
 
-import com.uma.wanchinchun.dtos.ProductReadDTO;
+import com.uma.wanchinchun.dtos.ProductDTO;
 
 import java.util.List;
 
 public interface IProductService {
-    List<ProductReadDTO> getAllProducts(Integer idProducto, Integer idCuenta, Integer idCategoria, String gtin);
-    boolean belongsToAccountWithAccess(Integer idProducto, Integer idCategoria);
+    List<ProductDTO> getAll(Long idProducto, Long idCuenta, Long idCategoria, String gtin);
+    ProductDTO create(Long idCuenta, ProductDTO productDTO);
+    ProductDTO update(Long idProducto, ProductDTO productDTO);
+    void delete(Long idProducto);
+    boolean hasAccessToAccount(Long idCuenta);
+    boolean exceedsLimit(Long idCuenta);
 }
