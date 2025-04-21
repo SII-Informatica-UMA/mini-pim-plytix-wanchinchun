@@ -18,8 +18,8 @@ public class ProductMapper implements IMapper<Product, ProductDTO> {
         dto.setTextoCorto(product.getTextoCorto());
         dto.setCreado(product.getCreado());
         dto.setModificado(product.getModificado());
-        dto.setMiniatura(product.getMiniatura().toString());
-        dto.setAtributos(product.getAtributos());
+        dto.setMiniatura(product.getMiniatura());
+        dto.setAtributos(product.getAttributes());
         dto.setCategorias(product.getCategorias());
         dto.setRelaciones(product.getRelacionesOrigen());
         dto.setRelaciones(product.getRelacionesDestino()); // FIX
@@ -37,8 +37,8 @@ public class ProductMapper implements IMapper<Product, ProductDTO> {
         product.setTextoCorto(dto.getTextoCorto());
         product.setCreado(dto.getCreado());
         product.setModificado(dto.getModificado());
-        product.setMiniatura(dto.getMiniatura().getBytes(StandardCharsets.UTF_8));
-        product.setAtributos(dto.getAtributos());
+        product.setMiniatura(dto.getMiniatura());
+        product.setAttributes(dto.getAtributos());
         product.setCategorias(dto.getCategorias());
         product.setRelacionesOrigen(dto.getRelaciones());
         product.setRelacionesDestino(dto.getRelaciones()); // FIX
@@ -55,7 +55,7 @@ public class ProductMapper implements IMapper<Product, ProductDTO> {
         toUpdate.setCreado(source.getCreado());
         toUpdate.setModificado(source.getModificado());
         toUpdate.setMiniatura(source.getMiniatura());
-        toUpdate.setAtributos(source.getAtributos());
+        toUpdate.setAttributes(source.getAttributes());
         toUpdate.setCategorias(source.getCategorias());
         toUpdate.setRelacionesOrigen(source.getRelacionesOrigen());
         toUpdate.setRelacionesDestino(source.getRelacionesDestino());
