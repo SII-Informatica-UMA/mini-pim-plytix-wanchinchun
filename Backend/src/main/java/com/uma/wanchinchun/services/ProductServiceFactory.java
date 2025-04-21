@@ -1,7 +1,10 @@
 package com.uma.wanchinchun.services;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Map;
 
+@Component
 public class ProductServiceFactory {
 
     private final Map<String, IProductService> services;

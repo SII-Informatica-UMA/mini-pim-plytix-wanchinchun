@@ -9,6 +9,4 @@ public interface IProductService {
     ProductDTO create(Long idCuenta, ProductDTO productDTO);
     ProductDTO update(Long idProducto, ProductDTO productDTO);
     void delete(Long idProducto);
-    boolean hasAccessToAccount(Long idCuenta);
-    boolean exceedsLimit(Long idCuenta);
 }
