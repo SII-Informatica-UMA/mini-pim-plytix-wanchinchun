@@ -47,14 +47,14 @@ public class WanchinchunApplication {
             laptop.setGtin("1234567890123");
             laptop.setSku("LP-HP-001");
             laptop.setTextoCorto("Portátil profesional");
-            laptop.setCreado(new Date());
+            //laptop.setCreado(new Date());
             
             Product mouse = new Product();
             mouse.setNombre("Mouse inalámbrico");
             mouse.setGtin("9876543210987");
             mouse.setSku("MS-WL-001");
             mouse.setTextoCorto("Mouse ergonómico");
-            mouse.setCreado(new Date());
+            //mouse.setCreado(new Date());
 
             // 3. Establecer relaciones ManyToMany
             //laptop.getCategorias().add(electronica);
