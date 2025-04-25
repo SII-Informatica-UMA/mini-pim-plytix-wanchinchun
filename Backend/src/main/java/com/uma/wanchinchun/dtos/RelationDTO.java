@@ -2,17 +2,17 @@ package com.uma.wanchinchun.dtos;
 
 import java.io.Serializable;
 
-public class RelationshipDTO {
+public class RelationDTO {
     private Long id;
     private Long idOrigen;
     private Long idDestino;
     private String tipoRelacion;
 
     // Constructor
-    public RelationshipDTO() {
+    public RelationDTO() {
     }
 
-    public RelationshipDTO(Long id, Long idOrigen, Long idDestino, String tipoRelacion) {
+    public RelationDTO(Long id, Long idOrigen, Long idDestino, String tipoRelacion) {
         this.id = id;
         this.idOrigen = idOrigen;
         this.idDestino = idDestino;
@@ -54,7 +54,7 @@ public class RelationshipDTO {
 
     @Override
     public String toString() {
-        return "RelationshipDTO{" +
+        return "RelationDTO{" +
                 "id=" + id +
                 ", idOrigen=" + idOrigen +
                 ", idDestino=" + idDestino +

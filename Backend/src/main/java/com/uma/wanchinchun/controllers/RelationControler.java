@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.uma.wanchinchun.services.RelationService;
+import com.uma.wanchinchun.models.Relationship;
+import com.uma.wanchinchun.dtos.RelationDTO;
 
 @RestController
 @RequestMapping(path = "/relacion")
@@ -14,20 +18,20 @@ public class RelationControler {
     public RelationControler(RelationService relationService) { this.relationService = relationService; }
 
     @GetMapping
-    public List<Product> getAll() {
+    public List<Relationship> getAll() {
         return relationService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getOne(@PathVariable Long id) {
+    public ResponseEntity<Relationship> getOne(@PathVariable Long id) {
         return relationService.findById(id)
                   .map(ResponseEntity::ok)
                   .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@Valid @RequestBody Product p) {
-        Product saved = relationService.save(p);
+    public ResponseEntity<Relationship> create(@RequestBody Relationship p) {
+        Relationship saved = relationService.save(p);
         URI loc = ServletUriComponentsBuilder.fromCurrentRequest()
                   .path("/{id}")
                   .buildAndExpand(saved.getId())
@@ -36,9 +40,9 @@ public class RelationControler {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id,
-                                          @Valid @RequestBody Product p) {
-        if (!relationService.findById(id).isPresent()) {
+    public ResponseEntity<Relationship> update(@PathVariable Long id,
+                                          @RequestBody Relationship p) {
+        if (relationService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         p.setId(id);
