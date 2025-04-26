@@ -34,10 +34,10 @@ public class WanchinchunApplication {
             // 1. Crear categorías
             Category electronica = new Category();
             electronica.setNombre("Electrónica");
-            
+
             Category computacion = new Category();
             computacion.setNombre("Computación");
-            
+
             categoryRepository.save(electronica);
             categoryRepository.save(computacion);
 
@@ -47,13 +47,15 @@ public class WanchinchunApplication {
             laptop.setGtin("1234567890123");
             laptop.setSku("LP-HP-001");
             laptop.setTextoCorto("Portátil profesional");
+            laptop.setIdCuenta(1L);
             //laptop.setCreado(new Date());
-            
+
             Product mouse = new Product();
             mouse.setNombre("Mouse inalámbrico");
             mouse.setGtin("9876543210987");
             mouse.setSku("MS-WL-001");
             mouse.setTextoCorto("Mouse ergonómico");
+            mouse.setIdCuenta(1L);
             //mouse.setCreado(new Date());
 
             // 3. Establecer relaciones ManyToMany
