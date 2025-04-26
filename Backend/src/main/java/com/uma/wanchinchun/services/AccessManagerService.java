@@ -4,9 +4,11 @@ import com.uma.wanchinchun.dtos.AccountDTO;
 import com.uma.wanchinchun.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.RequestEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class AccessManagerService implements IAccessManagerService {
 
     @Value("${microservice.users.baseurl}")
@@ -20,25 +22,43 @@ public class AccessManagerService implements IAccessManagerService {
     }
 
     @Override
-    public boolean hasAccessToAccount(Long idCuenta) {
-        if (idCuenta == null) {
+    public boolean hasAccessToAccount(String jwt, Long idCuenta) {
+
+        var request = RequestEntity.get(baseUrl + "/cuenta/" + idCuenta + "/propietario")
+                .header("Authorization", "Bearer " + jwt)
+                .build();
+
+        try {
+            var response = restTemplate.exchange(request, String.class);
+            HttpStatusCode statusCode = response.getStatusCode();
+            return statusCode.is2xxSuccessful();
+        } catch (Exception e) {
+//            throw new RuntimeException("Fetching could not be done.");
+            System.out.println("Fetching could not be done.");
             return false;
         }
-        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "/cuenta/" + idCuenta + "/propietario", String.class);
-        HttpStatusCode statusCode = response.getStatusCode();
-
-        return statusCode.is2xxSuccessful();
     }
 
     /**
-     * Precondicion: Debe tener acceso a la cuenta
+     * Precondition: Must have access to account
      * @param idCuenta
      * @return
      */
     @Override
-    public boolean exceedsLimit(Long idCuenta) {
-        ResponseEntity<AccountDTO> response = restTemplate.getForEntity(baseUrl + "/cuenta/?idCuenta=" + idCuenta, AccountDTO.class);
-        AccountDTO accountInfo = response.getBody();
+    public boolean exceedsLimit(String jwt, Long idCuenta) {
+
+        var request = RequestEntity.get(baseUrl + "/cuenta/?idCuenta=" + idCuenta)
+                .header("Authorization", "Bearer " + jwt)
+                .build();
+
+        AccountDTO accountInfo;
+        try {
+            var response = restTemplate.exchange(request, AccountDTO.class);
+            accountInfo = response.getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Could not fetch data from server.");
+        }
+
         if (accountInfo == null) {
             throw new NullPointerException("Account info does not exist for the given idCuenta argument");
         }

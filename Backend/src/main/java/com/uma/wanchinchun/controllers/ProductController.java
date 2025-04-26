@@ -25,18 +25,19 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAll(@RequestParam Long idProducto, @RequestParam Long idCuenta,
-                                                           @RequestParam Long idCategoria, @RequestParam String gtin) {
+    public ResponseEntity<List<ProductDTO>> getAll(@RequestParam Long idProducto,
+                                                   @RequestParam Long idCuenta,
+                                                   @RequestParam Long idCategoria,
+                                                   @RequestParam String gtin,
+                                                   @RequestHeader(value = "Authorization", required = false) String authorization) {
 
-        // condición que se debe cumplir
-        // (gtin && gtin >= 0) ||
-        // (idProducto && idCuenta && idProducto >= 0 && idCuenta >= 0) ||
-        // (idCategoria && idCuenta && idCategoria >= 0 && idCuenta >= 0)
+        String jwt;
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            jwt = authorization.substring(7);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        // morgan -> \
-        // (!gtin || gtin < 0) &&
-        // (!idProducto || !idCuenta || idProducto < 0 || idCuenta < 0) &&
-        // (!idCategoria || !idCuenta || idCategoria < 0 || idCuenta < 0)
         if ((gtin == null || !gtin.isEmpty())
                 && (idProducto == null || idCuenta == null || idProducto < 0 || idCuenta < 0)
                 && (idCategoria == null || idCuenta == null || idCategoria < 0 || idCuenta < 0)) {
@@ -44,7 +45,7 @@ public class ProductController {
         }
 
         try {
-            List<ProductDTO> products = productService.getAll(idProducto, idCuenta, idCategoria, gtin);
+            List<ProductDTO> products = productService.getAll(jwt, idProducto, idCuenta, idCategoria, gtin);
             if (products == null || products.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
@@ -58,14 +59,22 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> create(@RequestParam Long idCuenta, @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> create(@RequestParam Long idCuenta, @RequestBody ProductDTO productDTO,
+                                             @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+        String jwt;
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            jwt = authorization.substring(7);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         if (idCuenta == null || idCuenta < 0 || productDTO == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         try {
-            ProductDTO createdProduct = productService.create(idCuenta, productDTO);
+            ProductDTO createdProduct = productService.create(jwt, idCuenta, productDTO);
             if (createdProduct == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
@@ -80,14 +89,22 @@ public class ProductController {
     }
 
     @PutMapping("/{idProducto}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long idProducto, @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> update(@PathVariable Long idProducto, @RequestBody ProductDTO productDTO,
+                                             @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+        String jwt;
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            jwt = authorization.substring(7);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         if (idProducto == null || idProducto < 0 || productDTO == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         try {
-            productService.update(idProducto, productDTO);
+            productService.update(jwt, idProducto, productDTO);
             return ResponseEntity.ok(productDTO);
         } catch (PIMException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -99,14 +116,22 @@ public class ProductController {
     }
 
     @DeleteMapping("/{idProducto}")
-    public ResponseEntity<Void> delete(@PathVariable Long idProducto) {
+    public ResponseEntity<Void> delete(@PathVariable Long idProducto,
+                                       @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+        String jwt;
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            jwt = authorization.substring(7);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         if (idProducto == null || idProducto < 0) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         try {
-            productService.delete(idProducto);
+            productService.delete(jwt, idProducto);
             return ResponseEntity.ok().build();
         } catch (PIMException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -116,4 +141,5 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }

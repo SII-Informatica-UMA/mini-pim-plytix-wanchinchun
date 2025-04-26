@@ -31,7 +31,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductDTO> getAll(Long idProducto, Long idCuenta, Long idCategoria, String gtin) {
+    public List<ProductDTO> getAll(String jwt, Long idProducto, Long idCuenta, Long idCategoria, String gtin) {
 
         if (gtin != null && !gtin.isEmpty()) {
             Optional<Product> productFromDB = productRepository.findByGtin(gtin);
@@ -41,7 +41,7 @@ public class ProductService implements IProductService {
             }
         }
 
-        boolean hasAccess = accessManagerService.hasAccessToAccount(idCuenta);
+        boolean hasAccess = accessManagerService.hasAccessToAccount(jwt, idCuenta);
         if (!hasAccess) {
             throw new UnauthorizedAccessException("User has not permission to access this data.");
         }
@@ -67,13 +67,13 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductDTO create(Long idCuenta, ProductDTO productDTO) {
+    public ProductDTO create(String jwt, Long idCuenta, ProductDTO productDTO) {
 
-        if (!accessManagerService.hasAccessToAccount(idCuenta)) {
+        if (!accessManagerService.hasAccessToAccount(jwt, idCuenta)) {
             throw new UnauthorizedAccessException("User has no access to this account.");
         }
 
-        if (accessManagerService.exceedsLimit(idCuenta)) {
+        if (accessManagerService.exceedsLimit(jwt, idCuenta)) {
             throw new ExceedsLimitException("The account is already at its limit of products.");
         }
 
@@ -88,7 +88,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductDTO update(Long idProducto, ProductDTO productDTO) {
+    public ProductDTO update(String jwt, Long idProducto, ProductDTO productDTO) {
 
         Optional<Product> productSameGtin = productRepository.findByGtin(productDTO.getGtin());
         if (productSameGtin.isPresent()) {
@@ -101,7 +101,7 @@ public class ProductService implements IProductService {
         }
 
         Product productToUpdate = productFromDB.get();
-        boolean hasAccess = accessManagerService.hasAccessToAccount(productToUpdate.getIdCuenta());
+        boolean hasAccess = accessManagerService.hasAccessToAccount(jwt, productToUpdate.getIdCuenta());
         if (!hasAccess) {
             throw new UnauthorizedAccessException("User has no access to this account");
         }
@@ -113,13 +113,13 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void delete(Long idProducto) {
+    public void delete(String jwt, Long idProducto) {
         Optional<Product> product = productRepository.findById(idProducto);
         if (product.isEmpty()) {
             throw new PIMException("There is no product with that ID");
         }
 
-        boolean hasAccess = accessManagerService.hasAccessToAccount(product.get().getIdCuenta());
+        boolean hasAccess = accessManagerService.hasAccessToAccount(jwt, product.get().getIdCuenta());
         if (!hasAccess) {
             throw new UnauthorizedAccessException("User has no access to this account");
         }
