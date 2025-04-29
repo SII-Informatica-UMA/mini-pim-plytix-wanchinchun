@@ -4,19 +4,15 @@ import java.io.Serializable;
 
 public class RelationDTO {
     private Long id;
-    private Long idOrigen;
-    private Long idDestino;
-    private String tipoRelacion;
+    private String nombre;
 
     // Constructor
     public RelationDTO() {
     }
 
-    public RelationDTO(Long id, Long idOrigen, Long idDestino, String tipoRelacion) {
+    public RelationDTO(Long id, String nombre) {
         this.id = id;
-        this.idOrigen = idOrigen;
-        this.idDestino = idDestino;
-        this.tipoRelacion = tipoRelacion;
+        this.nombre = nombre;
     }
 
     // Getters y Setters
@@ -28,37 +24,19 @@ public class RelationDTO {
         this.id = id;
     }
 
-    public Long getIdOrigen() {
-        return idOrigen;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setIdOrigen(Long idOrigen) {
-        this.idOrigen = idOrigen;
-    }
-
-    public Long getIdDestino() {
-        return idDestino;
-    }
-
-    public void setIdDestino(Long idDestino) {
-        this.idDestino = idDestino;
-    }
-
-    public String getTipoRelacion() {
-        return tipoRelacion;
-    }
-
-    public void setTipoRelacion(String tipoRelacion) {
-        this.tipoRelacion = tipoRelacion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     @Override
     public String toString() {
         return "RelationDTO{" +
                 "id=" + id +
-                ", idOrigen=" + idOrigen +
-                ", idDestino=" + idDestino +
-                ", tipoRelacion='" + tipoRelacion + '\'' +
+                ", nombre='" + nombre + '\'' +
                 '}';
     }
 }

@@ -11,101 +11,71 @@ import com.uma.wanchinchun.dtos.RelationDTO;
 import com.uma.wanchinchun.models.Relationship;
 import com.uma.wanchinchun.repositories.RelationRepository;
 
+import org.springframework.web.client.RestTemplate;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class RelationService {
 
     private final RelationRepository repo;
     //private final AccountPlanClient accountClient;
+    private final RestTemplate restTemplate;
 
-    public RelationService(RelationRepository repo) {
+    public RelationService(RelationRepository repo, RestTemplate restTemplate) {
         this.repo = repo;
+        this.restTemplate = restTemplate;
     }
 
-    /*public List<Relationship> findAll(/*Long accountId) {
+    public List<RelationDTO> findAll(/*Long accountId*/) {
         /*if (!accountClient.hasAccessToAccount(accountId)) {
             throw new IllegalStateException("No access to account " + accountId);
-        }
-        return repo.findAll()
-                   .stream()
-                   //.map(r -> mapToRelationDTO(r, Relationship.class))
-                   .collect(Collectors.toList());
+        }*/
+        return repo.findAll().stream()
+            .map(this::mapToRelationDTO)
+            .collect(Collectors.toList());
     }
 
     public RelationDTO findById(Long id) {
-        Relationship r = repo.findById(id)
-                             .orElseThrow(() -> new IllegalArgumentException("No existe relación " + id));
-        return mapToRelationDTO(r, RelationDTO.class);
-    }
-
-    public RelationDTO create(/*Long accountId, RelationDTO dto) {
-        /* comprobar límite en cuentas/planes
-        if (!accountClient.checkRelationshipLimit(accountId)) {
-            throw new IllegalStateException("Límite de relaciones alcanzado para la cuenta " + accountId);
+        /*Relationship r = repo.findById(id)
+                             .orElseThrow(() -> new IllegalArgumentException("No existe relación " + id));*/
+        Optional<Relationship> relacion = repo.findById(id);
+        if (relacion.isEmpty()) {
+            throw new IllegalArgumentException("No existe relación " + id);
         }
-        Relationship entity = mapToRelationDTO(dto, Relationship.class);
-        Relationship saved = repo.save(entity);
-        // notificar al microservicio de cuentas/planes
-        dto.setId(saved.getId());
-        //accountClient.notifyNewRelationship(accountId, dto);
-        return mapToRelationDTO(saved, RelationDTO.class);
-    }
-    
-    public RelationDTO update(Long id, RelationDTO dto) {
-        Relationship existing = repo.findById(id)
-                                   .orElseThrow(() -> new IllegalArgumentException("No existe relación " + id));
-        mapToRelationDTO(dto, existing);
-        existing.setId(id);
-        Relationship updated = repo.save(existing);
-        return mapToRelationDTO(updated, RelationDTO.class);
-    }*/
-
-
-
-
-
-    public List<Relationship> findAll(/*Long accountId*/) {
-        /*if (!accountClient.hasAccessToAccount(accountId)) {
-            throw new IllegalStateException("No access to account " + accountId);
-        }*/
-        return repo.findAll();
+        return mapToRelationDTO(relacion.get());
     }
 
-    public Relationship findById(Long id) {
-        Relationship r = repo.findById(id)
-                             .orElseThrow(() -> new IllegalArgumentException("No existe relación " + id));
-        return r;
-    }
-
-    public Relationship create(/*Long accountId,*/ Relationship relacion) {
+    public RelationDTO create(/*Long accountId,*/ Relationship relacion) {
         /* comprobar límite en cuentas/planes
         if (!accountClient.checkRelationshipLimit(accountId)) {
             throw new IllegalStateException("Límite de relaciones alcanzado para la cuenta " + accountId);
         }*/
         // notificar al microservicio de cuentas/planes
         //accountClient.notifyNewRelationship(accountId, dto);
-        return repo.save(relacion);
+        return mapToRelationDTO(repo.save(relacion));
     }
 
-    public Relationship update(Long id, Relationship dto) {
-        Relationship existing = repo.findById(id)
+    public RelationDTO update(Long id, Relationship dto) {
+        Relationship relacion = repo.findById(id)
                                    .orElseThrow(() -> new IllegalArgumentException("No existe relación " + id));
-        existing.setId(id);
-        return repo.save(existing);
+        dto.setId(id);
+        return mapToRelationDTO(repo.save(dto));
     }
 
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         // aquí podría notificar borrado
         repo.deleteById(id);
     }
 
     private RelationDTO mapToRelationDTO(Relationship product) {
-        return new RelationDTO();
-        /*return RelationDTO().builder()
+        /*return new RelationDTO();
+        return RelationDTO().builder()
             .id(product.getId())
             .idOrigen(product.getIdOrigen())
             .idDestino(product.getIdDestino())
             .tipoRelacion(product.getTipoRelacion())
             .build();*/
+        return new RelationDTO(product.getId(), product.getNombre());
     }
 }

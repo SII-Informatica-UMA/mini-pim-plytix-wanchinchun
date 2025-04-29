@@ -18,20 +18,22 @@ public class RelationControler {
     public RelationControler(RelationService relationService) { this.relationService = relationService; }
 
     @GetMapping
-    public List<Relationship> getAll() {
-        return relationService.findAll();
+    public ResponseEntity<List<RelationDTO>> getAll() {
+        return ResponseEntity.ok(relationService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Relationship> getOne(@PathVariable Long id) {
-        return relationService.findById(id)
-                  .map(ResponseEntity::ok)
-                  .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<RelationDTO> getOne(@PathVariable Long id) {
+        RelationDTO dto = relationService.findById(id);
+        if(dto == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ResponseEntity<Relationship> create(@RequestBody Relationship p) {
-        Relationship saved = relationService.save(p);
+    public ResponseEntity<RelationDTO> create(@RequestBody Relationship p) {
+        RelationDTO saved = relationService.create(p);
         URI loc = ServletUriComponentsBuilder.fromCurrentRequest()
                   .path("/{id}")
                   .buildAndExpand(saved.getId())
@@ -40,13 +42,17 @@ public class RelationControler {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Relationship> update(@PathVariable Long id,
+    public ResponseEntity<RelationDTO> update(@PathVariable Long id,
                                           @RequestBody Relationship p) {
-        if (relationService.findById(id).isEmpty()) {
+        RelationDTO dto = relationService.findById(id);
+        if(dto == null){
             return ResponseEntity.notFound().build();
         }
+        /*if (relationService.findById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }*/
         p.setId(id);
-        return ResponseEntity.ok(relationService.save(p));
+        return ResponseEntity.ok(relationService.create(p));
     }
 
     @DeleteMapping("/{id}")
