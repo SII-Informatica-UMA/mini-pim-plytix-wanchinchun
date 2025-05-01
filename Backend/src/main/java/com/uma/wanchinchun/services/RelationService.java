@@ -68,7 +68,7 @@ public class RelationService {
         repo.deleteById(id);
     }
 
-    private RelationDTO mapToRelationDTO(Relationship product) {
+    private RelationDTO mapToRelationDTO(Relationship relacion) {
         /*return new RelationDTO();
         return RelationDTO().builder()
             .id(product.getId())
@@ -76,6 +76,6 @@ public class RelationService {
             .idDestino(product.getIdDestino())
             .tipoRelacion(product.getTipoRelacion())
             .build();*/
-        return new RelationDTO(product.getId(), product.getNombre(), producto.getDescription());
+        return new RelationDTO(relacion.getId(), relacion.getNombre(), relacion.getDescription());
     }
 }
