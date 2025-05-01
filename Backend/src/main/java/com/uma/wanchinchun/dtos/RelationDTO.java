@@ -5,16 +5,16 @@ import java.io.Serializable;
 public class RelationDTO {
     private Long id;
     private String nombre;
-
-    // Constructor
+    private String descripcion;
+    // Constructor vacio
     public RelationDTO() {
     }
 
-    public RelationDTO(Long id, String nombre) {
+    public RelationDTO(Long id, String nombre, String descripcion) {
         this.id = id;
         this.nombre = nombre;
+        this.descripcion = descripcion;
     }
-
     // Getters y Setters
     public Long getId() {
         return id;
@@ -32,11 +32,20 @@ public class RelationDTO {
         this.nombre = nombre;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Override
     public String toString() {
         return "RelationDTO{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
                 '}';
     }
 }

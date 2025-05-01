@@ -76,6 +76,6 @@ public class RelationService {
             .idDestino(product.getIdDestino())
             .tipoRelacion(product.getTipoRelacion())
             .build();*/
-        return new RelationDTO(product.getId(), product.getNombre());
+        return new RelationDTO(product.getId(), product.getNombre(), producto.getDescription());
     }
 }
