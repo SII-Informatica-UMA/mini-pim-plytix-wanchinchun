@@ -1,12 +1,15 @@
 package com.uma.wanchinchun.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
 
 @Embeddable
-public class Atributo {
+public class Attribute {
+    @Column(nullable = false)
     private String nombre;
+    @Column(nullable = false)
     private String valor;
 
     public String getNombre() {
@@ -29,8 +32,8 @@ public class Atributo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Atributo atributo = (Atributo) o;
-        return nombre.equals(atributo.nombre) && valor.equals(atributo.valor);
+        Attribute attribute = (Attribute) o;
+        return nombre.equals(attribute.nombre) && valor.equals(attribute.valor);
     }
 
     @Override

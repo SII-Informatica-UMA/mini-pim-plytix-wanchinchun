@@ -12,8 +12,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable = false)
     private String nombre;
-     @ManyToMany(mappedBy = "categorias")
+    @ManyToMany(mappedBy = "categorias")
     private Set<Product> productos = new HashSet<>();
 
     // Constructor Vacío
@@ -21,7 +22,7 @@ public class Category {
     }
 
     // Getters
-       public Long getId() {
+    public Long getId() {
         return id;
     }
 

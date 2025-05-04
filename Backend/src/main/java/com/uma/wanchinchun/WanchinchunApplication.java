@@ -7,7 +7,9 @@ import com.uma.wanchinchun.repositories.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 
@@ -19,6 +21,11 @@ public class WanchinchunApplication {
     }
 
     @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
+
+    @Bean
     public CommandLineRunner initData(ProductRepository productRepository, 
                                     CategoryRepository categoryRepository) {
         return args -> {
@@ -27,10 +34,10 @@ public class WanchinchunApplication {
             // 1. Crear categorías
             Category electronica = new Category();
             electronica.setNombre("Electrónica");
-            
+
             Category computacion = new Category();
             computacion.setNombre("Computación");
-            
+
             categoryRepository.save(electronica);
             categoryRepository.save(computacion);
 
@@ -40,14 +47,16 @@ public class WanchinchunApplication {
             laptop.setGtin("1234567890123");
             laptop.setSku("LP-HP-001");
             laptop.setTextoCorto("Portátil profesional");
-            laptop.setCreado(new Date());
-            
+            laptop.setIdCuenta(1L);
+            //laptop.setCreado(new Date());
+
             Product mouse = new Product();
             mouse.setNombre("Mouse inalámbrico");
             mouse.setGtin("9876543210987");
             mouse.setSku("MS-WL-001");
             mouse.setTextoCorto("Mouse ergonómico");
-            mouse.setCreado(new Date());
+            mouse.setIdCuenta(1L);
+            //mouse.setCreado(new Date());
 
             // 3. Establecer relaciones ManyToMany
             //laptop.getCategorias().add(electronica);
