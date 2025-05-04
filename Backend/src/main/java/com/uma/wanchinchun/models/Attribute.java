@@ -1,12 +1,15 @@
 package com.uma.wanchinchun.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
 
 @Embeddable
 public class Attribute {
+    @Column(nullable = false)
     private String nombre;
+    @Column(nullable = false)
     private String valor;
 
     public String getNombre() {

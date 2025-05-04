@@ -1,27 +1,32 @@
 package com.uma.wanchinchun.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Entity
 @Table(name = "productos")
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String gtin;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String sku;
+    @Column(nullable = false)
     private String nombre;
     private String textoCorto;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date creado;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modificado;
-    @Lob
-    private byte[] miniatura;
+    @CreationTimestamp
+    //@Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private OffsetDateTime creado;
+    //@Temporal(TemporalType.TIMESTAMP)
+    private OffsetDateTime modificado;
+    private String miniatura;
+    @Column(nullable = false)
+    private Long idCuenta;
     @ElementCollection
     @CollectionTable(name = "atributos_producto", joinColumns = @JoinColumn(name = "id_producto"))
     private List<Attribute> attributes;
@@ -36,7 +41,11 @@ public class Product {
 
     public Product() {}
 
-    public Product(Long id, String gtin, String sku, String nombre, String textoCorto, Date creado, Date modificado, byte[] miniatura, List<Attribute> attributes, Set<Category> categorias, List<ProductRelationship> relacionesOrigen, List<ProductRelationship> relacionesDestino) {
+    public Product(Long id, String gtin, String sku, String nombre, String textoCorto,
+                   OffsetDateTime creado, OffsetDateTime modificado, String miniatura,
+                   Long idCuenta, List<Attribute> attributes, Set<Category> categorias,
+                   List<ProductRelationship> relacionesOrigen,
+                   List<ProductRelationship> relacionesDestino) {
         this.id = id;
         this.gtin = gtin;
         this.sku = sku;
@@ -45,6 +54,7 @@ public class Product {
         this.creado = creado;
         this.modificado = modificado;
         this.miniatura = miniatura;
+        this.idCuenta = idCuenta;
         this.attributes = attributes;
         this.categorias = categorias;
         this.relacionesOrigen = relacionesOrigen;
@@ -91,35 +101,43 @@ public class Product {
         this.textoCorto = textoCorto;
     }
 
-    public Date getCreado() {
+    public OffsetDateTime getCreado() {
         return creado;
     }
 
-    public void setCreado(Date creado) {
+    public void setCreado(OffsetDateTime creado) {
         this.creado = creado;
     }
 
-    public Date getModificado() {
+    public OffsetDateTime getModificado() {
         return modificado;
     }
 
-    public void setModificado(Date modificado) {
+    public void setModificado(OffsetDateTime modificado) {
         this.modificado = modificado;
     }
 
-    public byte[] getMiniatura() {
+    public String getMiniatura() {
         return miniatura;
     }
 
-    public void setMiniatura(byte[] miniatura) {
+    public void setMiniatura(String miniatura) {
         this.miniatura = miniatura;
     }
 
-    public List<Attribute> getAtributos() {
+    public Long getIdCuenta() {
+        return idCuenta;
+    }
+
+    public void setIdCuenta(Long idCuenta) {
+        this.idCuenta = idCuenta;
+    }
+
+    public List<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAtributos(List<Attribute> attributes) {
+    public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
 
@@ -149,16 +167,13 @@ public class Product {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id.equals(product.id) && gtin.equals(product.gtin) && sku.equals(product.sku) && nombre.equals(product.nombre) && textoCorto.equals(product.textoCorto) && creado.equals(product.creado) && modificado.equals(product.modificado) && Arrays.equals(miniatura, product.miniatura) && attributes.equals(product.attributes) && categorias.equals(product.categorias) && relacionesOrigen.equals(product.relacionesOrigen) && relacionesDestino.equals(product.relacionesDestino);
+        return Objects.equals(id, product.id) && Objects.equals(gtin, product.gtin) && Objects.equals(sku, product.sku) && Objects.equals(nombre, product.nombre) && Objects.equals(textoCorto, product.textoCorto) && Objects.equals(creado, product.creado) && Objects.equals(modificado, product.modificado) && Objects.equals(miniatura, product.miniatura) && Objects.equals(idCuenta, product.idCuenta) && Objects.equals(attributes, product.attributes) && Objects.equals(categorias, product.categorias) && Objects.equals(relacionesOrigen, product.relacionesOrigen) && Objects.equals(relacionesDestino, product.relacionesDestino);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, gtin, sku, nombre, textoCorto, creado, modificado, attributes, categorias, relacionesOrigen, relacionesDestino);
-        result = 31 * result + Arrays.hashCode(miniatura);
-        return result;
+        return Objects.hash(id, gtin, sku, nombre, textoCorto, creado, modificado, miniatura, idCuenta, attributes, categorias, relacionesOrigen, relacionesDestino);
     }
 }

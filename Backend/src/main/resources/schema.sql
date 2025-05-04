@@ -7,13 +7,13 @@
 
     create table atributos_producto (
         id_producto bigint not null,
-        nombre varchar(255),
-        valor varchar(255)
+        nombre varchar(255) not null,
+        valor varchar(255) not null
     );
 
     create table categorias (
         id bigint not null,
-        nombre varchar(255),
+        nombre varchar(255) not null,
         primary key (id)
     );
 
@@ -24,14 +24,15 @@
     );
 
     create table productos (
-        creado timestamp(6),
+        creado timestamp(6) with time zone not null,
         id bigint not null,
-        modificado timestamp(6),
-        gtin varchar(255),
-        nombre varchar(255),
-        sku varchar(255),
+        id_cuenta bigint not null,
+        modificado timestamp(6) with time zone,
+        gtin varchar(255) not null unique,
+        miniatura varchar(255),
+        nombre varchar(255) not null,
+        sku varchar(255) not null unique,
         texto_corto varchar(255),
-        miniatura blob,
         primary key (id)
     );
 
@@ -45,7 +46,7 @@
     create table relaciones (
         id bigint not null,
         description varchar(255),
-        nombre varchar(255),
+        nombre varchar(255) not null,
         primary key (id)
     );
 
