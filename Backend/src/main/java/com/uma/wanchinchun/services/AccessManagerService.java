@@ -66,6 +66,6 @@ public class AccessManagerService implements IAccessManagerService {
         Integer productsQuantity = productRepository.countProductsOwnedByAccount(idCuenta);
         Integer maxProductsQuantity = accountInfo.getPlan().getMaxProductos();
 
-        return productsQuantity + 1 <= maxProductsQuantity;
+        return productsQuantity + 1 > maxProductsQuantity;
     }
 }
