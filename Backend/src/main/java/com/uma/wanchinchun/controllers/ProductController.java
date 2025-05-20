@@ -38,7 +38,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if ((gtin == null || !gtin.isEmpty())
+        if ((gtin == null || gtin.isEmpty())
                 && (idProducto == null || idCuenta == null || idProducto < 0 || idCuenta < 0)
                 && (idCategoria == null || idCuenta == null || idCategoria < 0 || idCuenta < 0)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
