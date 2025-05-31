@@ -1,3 +1,13 @@
+drop table if exists atributos_producto;
+drop table if exists producto_categoria;
+drop table if exists productos_relacionados;
+drop table if exists productos;
+drop table if exists categorias;
+drop table if exists relaciones;
+
+drop sequence if exists categorias_seq;
+drop sequence if exists productos_seq;
+drop sequence if exists relaciones_seq;
 
     create sequence categorias_seq start with 1 increment by 50;
 
