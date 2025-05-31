@@ -57,12 +57,14 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public void deleteCategory(Long id) {
-        categoryRepository.findById(id).ifPresent(category -> {
+    public boolean deleteCategory(Long id) {
+        return categoryRepository.findById(id).map(category -> {
             if (category.getProductos().isEmpty()) {
                 categoryRepository.delete(category);
+                return true;
             }
-        });
+            return false;
+        }).orElse(false);
     }
 
     @Override

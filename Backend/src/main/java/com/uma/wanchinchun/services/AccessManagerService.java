@@ -23,7 +23,6 @@ public class AccessManagerService implements IAccessManagerService {
 
     @Override
     public boolean hasAccessToAccount(String jwt, Long idCuenta) {
-
         var request = RequestEntity.get(baseUrl + "/cuenta/" + idCuenta + "/propietario")
                 .header("Authorization", "Bearer " + jwt)
                 .build();
@@ -33,7 +32,6 @@ public class AccessManagerService implements IAccessManagerService {
             HttpStatusCode statusCode = response.getStatusCode();
             return statusCode.is2xxSuccessful();
         } catch (Exception e) {
-//            throw new RuntimeException("Fetching could not be done.");
             System.out.println("Fetching could not be done.");
             return false;
         }
@@ -66,6 +64,6 @@ public class AccessManagerService implements IAccessManagerService {
         Integer productsQuantity = productRepository.countProductsOwnedByAccount(idCuenta);
         Integer maxProductsQuantity = accountInfo.getPlan().getMaxProductos();
 
-        return productsQuantity + 1 > maxProductsQuantity;
+        return productsQuantity + 1 <= maxProductsQuantity;
     }
 }
